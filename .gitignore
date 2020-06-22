@@ -1,0 +1,10 @@
+coverage
+coverage.clover
+docs
+sami.phar
+vendor
+xdebug-filter.php
+.idea
+.php_cs.cache
+.phpunit.result.cache
+.sami
