@@ -18,7 +18,7 @@ $versions = GitVersionCollection::create($dir)
     ->add('master', 'master branch');
 
 $repo = new GitHubRemoteRepository(
-    'mtvbrianking/laravel-package-boilerplate',
+    'mtvbrianking/laravel-publishable',
     dirname($dir),
     'https://github.com/'
 );
@@ -26,7 +26,7 @@ $repo = new GitHubRemoteRepository(
 $options = [
     'theme' => 'default',
     'versions' => $versions,
-    'title' => 'Laravel Package Boilerplate',
+    'title' => 'Laravel Publishable',
     'build_dir' => __DIR__ . '/docs',
     'cache_dir' => __DIR__ . '/docs/cache',
     'remote_repository' => $repo,

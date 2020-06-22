@@ -1,36 +1,21 @@
 <?php
-namespace Bmatovu\HelloWorld\Tests;
+namespace Bmatovu\Publishable\Tests;
 
-use Bmatovu\HelloWorld\HelloWorldServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
     /**
-     * Add package service provider.
+     * Setup the test environment.
      *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return array
+     * @return void
      */
-    protected function getPackageProviders($app)
+    protected function setUp(): void
     {
-        return [
-            HelloWorldServiceProvider::class,
-        ];
-    }
+        parent::setUp();
 
-    /**
-     * Get package aliases.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return array
-     */
-    protected function getPackageAliases($app)
-    {
-        return [
-            'HelloWorld' => 'Bmatovu\HelloWorld\HelloWorldFacade',
-        ];
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+
+        $this->withFactories(__DIR__.'/database/factories');
     }
 }

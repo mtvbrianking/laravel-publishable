@@ -1,16 +1,17 @@
 {
-  "name": "bmatovu/laravel-package-boilerplate",
-  "description": "Laravel package boilerplate.",
-  "homepage": "https://github.com/mtvbrianking/laravel-package-boilerplate",
+  "name": "bmatovu/laravel-publishable",
+  "description": "Laravel publisable.",
+  "homepage": "https://github.com/mtvbrianking/laravel-publishable",
   "type": "project",
   "license": "MIT",
   "keywords": [
     "laravel",
     "lumen",
-    "package",
-    "development",
-    "starter",
-    "boilerplate"
+    "eloquent",
+    "model",
+    "publishable",
+    "trait",
+    "package"
   ],
   "authors": [
     {
@@ -22,21 +23,22 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "illuminate/support": "^5.5|^6.0|^7.0"
+    "illuminate/database": "^5.5|^6.0|^7.0"
   },
   "require-dev": {
-    "illuminate/container": "^5.5|^6.0|^7.0",
+    "fzaninotto/faker": "~1.4",
+    "illuminate/support": "^5.5|^6.0|^7.0",
     "orchestra/testbench": "^3.5|^4.0|^5.0",
     "phpunit/phpunit": "^6.0|^7.0|^8.0|^9.0"
   },
   "autoload": {
     "psr-4": {
-      "Bmatovu\\HelloWorld\\": "src/"
+      "Bmatovu\\Publishable\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Bmatovu\\HelloWorld\\Tests\\": "tests/"
+      "Bmatovu\\Publishable\\Tests\\": "tests/"
     }
   },
   "minimum-stability": "dev",
@@ -48,15 +50,5 @@
   },
   "config": {
     "sort-packages": true
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Bmatovu\\HelloWorld\\HelloWorldServiceProvider"
-      ],
-      "aliases": {
-        "HelloWorld": "Bmatovu\\HelloWorld\\HelloWorldFacade"
-      }
-    }
   }
 }

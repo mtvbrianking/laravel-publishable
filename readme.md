@@ -1,65 +1,113 @@
-## Laravel Package Boilerplate.
+## Laravel Publishable.
 
-[![Build Status](https://travis-ci.org/mtvbrianking/laravel-package-boilerplate.svg?branch=master)](https://travis-ci.org/mtvbrianking/laravel-package-boilerplate)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mtvbrianking/laravel-package-boilerplate/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mtvbrianking/laravel-package-boilerplate/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/mtvbrianking/laravel-package-boilerplate/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mtvbrianking/laravel-package-boilerplate/?branch=master)
+[![Build Status](https://travis-ci.org/mtvbrianking/laravel-publishable.svg?branch=master)](https://travis-ci.org/mtvbrianking/laravel-publishable)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mtvbrianking/laravel-publishable/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mtvbrianking/laravel-publishable/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/mtvbrianking/laravel-publishable/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mtvbrianking/laravel-publishable/?branch=master)
 [![StyleCI](https://github.styleci.io/repos/230607368/shield?branch=master)](https://github.styleci.io/repos/230607368)
-[![Documentation](https://img.shields.io/badge/Documentation-Blue)](https://mtvbrianking.github.io/laravel-package-boilerplate)
+[![Documentation](https://img.shields.io/badge/Documentation-Blue)](https://mtvbrianking.github.io/laravel-publishable)
 
-### [Installation](https://packagist.org/packages/bmatovu/laravel-package-boilerplate)
+This package contains a trait to make Eloquent models publishable. It enables the model to hold a published vs non-published state, which comes in handy for things like blog posts that can be drafts or final (published) posts.
+
+It uses a `published_at` attribute to determine the model state ie, if the model published_at is null, the model isn't published.
+
+
+### [Installation](https://packagist.org/packages/bmatovu/laravel-publishable)
 
 Install via Composer package manager:
 
-```bash
-composer create-project --prefer-dist bmatovu/laravel-package-boilerplate hello-world
+```
+composer require bmatovu/laravel-publishable-trait
 ```
 
-### Step #1: Own the package
+### Usage
 
-Update the `composer.json` file to match your credentials.
+You should also add the `publsihed_at` column to your database table. 
 
-Change the namespaces to match those you're using in `src`.
+```php
+<?php
 
-Change the type from `project` to `library`
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-```bash
-composer dump-autoload
+class CreatePostsTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('posts', function (Blueprint $table) {
+            // ...
+            $table->timestamp('published_at')->nullable();
+        });
+    }
+}
 ```
 
-### Step #2: Source code documentation
+To enable soft deletes for a model, use the `Illuminate\Database\Eloquent\SoftDeletes` trait on the model:
 
-You need to download [Sami](https://github.com/FriendsOfPHP/Sami) for source code documentation.
+```php
+<?php
 
-```bash
-curl -O http://get.sensiolabs.org/sami.phar
+namespace App;
+
+use Bmatovu\Publishable\Publishable;
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+use Publishable;
+}
 ```
 
-To auto deploy documentation; be sure to add a [`Github token`](https://github.com/settings/tokens) for authorization.
+> {tip} The `Publishable` trait will automatically cast the `published_at` attribute to a `DateTime` / `Carbon` instance for you.
 
-### Step #3: Code Style & Quality
+Now, when you call the `publish` method on the model, the `published_at` column will be set to the current date and time. And, when querying a model that is publishable, the unpublished models will automatically be excluded from all query results.
 
-We've added [StyleCI](https://styleci.io) configurations with the Laravel present to get you started.
+To determine if a given model instance has been published, use the `isPublished` method:
 
-Also added [ScrutinizerCI](https://scrutinizer-ci.com) configurations for code quality, test coverage inspection.
-
-Locally, you can restort to [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer).
-
-```bash
-php-cs-fixer fix
+```php
+if ($post->isPublished()) {
+    //
+}
 ```
 
-### Step #4: Sharing the package
+### Querying Publishable Models
 
-You may publish your package via [Packagist](#)
+Unpublished models are automatically be excluded from query results.
 
-Remember to update `.gitattributes` to exempt some files from releases.
+```php
+$publishedPosts = Post::get();
 
-## Testing
+$publishedPosts = Post::onlyPublished()->get();
+```
 
-We've defaulted to [Orchestra's testbench](https://github.com/orchestral/testbench)
+However, you may force unpublished models to appear in a result set using the `withDrafts` method on the query:
 
-## Useful resource
+```php
+$posts = Posts::withDrafts()->get();
+```
 
-- [Laravel Package Development](https://laravel.com/docs/master/packages)
+You may also retrieve **only** unpublished models using the `onlyDrafts` method.
 
-- [Travis CI + GitHub Pages - Automated deployment](https://www.youtube.com/watch?v=BFpSD2eoXUk)
+```php
+$drafts = Posts::onlyDrafts()->get();
+```
+
+### Publishing Models
+
+Sometimes you may need to save a model as published in your database. For this, use the `publish` method:
+
+```php
+// Publishing a single model instance...
+$post->publish();
+
+// Publishing all related models...
+$post->inLifeStyle()->publish();
+```
+
+### Unpublishing Models
+
+Sometimes you may wish to "un-published" a published model. To toogle a published model into an inactive state, use the `unpublish` method on a model instance:
+
+```php
+$post->unpublish();
+```
