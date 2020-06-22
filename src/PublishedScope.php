@@ -43,22 +43,6 @@ class PublishedScope implements Scope
     }
 
     /**
-     * Get the "published at" column for the builder.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $builder
-     *
-     * @return string
-     */
-    protected function getPublishedAtColumn(Builder $builder)
-    {
-        if (count((array) $builder->getQuery()->joins) > 0) {
-            return $builder->getModel()->getQualifiedPublishedAtColumn();
-        }
-
-        return $builder->getModel()->getPublishedAtColumn();
-    }
-
-    /**
      * Add the with-drafts extension to the builder.
      *
      * @param \Illuminate\Database\Eloquent\Builder $builder
@@ -67,11 +51,7 @@ class PublishedScope implements Scope
      */
     protected function addWithDrafts(Builder $builder)
     {
-        $builder->macro('withDrafts', function (Builder $builder, $withDrafts = true) {
-            if (! $withDrafts) {
-                return $builder->onlyPublished();
-            }
-
+        $builder->macro('withDrafts', function (Builder $builder) {
             return $builder->withoutGlobalScope($this);
         });
     }

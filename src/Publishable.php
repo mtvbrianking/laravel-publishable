@@ -10,13 +10,6 @@ namespace Bmatovu\Publishable;
 trait Publishable
 {
     /**
-     * Indicates if the model is currently showing drafts.
-     *
-     * @var bool
-     */
-    protected $publishes = true;
-
-    /**
      * Boot the has-drafts trait for a model.
      *
      * @return void
@@ -82,7 +75,7 @@ trait Publishable
         $saved = parent::save($options);
 
         if ($saved) {
-            $this->fireModelEvent('published', false);
+            $this->fireModelEvent('unpublished', false);
         }
 
         return $saved;
@@ -111,13 +104,15 @@ trait Publishable
     }
 
     /**
-     * Determine if the model is currently using drafts.
+     * Register a "unpublished" model event callback with the dispatcher.
      *
-     * @return bool
+     * @param \Closure|string $callback
+     *
+     * @return void
      */
-    public function canPublish()
+    public static function unpublished($callback)
     {
-        return $this->publishes;
+        static::registerModelEvent('unpublished', $callback);
     }
 
     /**

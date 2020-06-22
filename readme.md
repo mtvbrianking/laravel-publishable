@@ -16,7 +16,7 @@ It uses a `published_at` attribute to determine the model state ie, if the model
 Install via Composer package manager:
 
 ```
-composer require bmatovu/laravel-publishable-trait
+composer require bmatovu/laravel-publishable
 ```
 
 ### Usage
@@ -54,7 +54,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-use Publishable;
+    use Publishable;
 }
 ```
 
