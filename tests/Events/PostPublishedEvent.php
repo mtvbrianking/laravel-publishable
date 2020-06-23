@@ -3,12 +3,18 @@
 namespace Bmatovu\Publishable\Tests\Events;
 
 use Bmatovu\Publishable\Tests\Models\Post;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PostUnpublished
+class PostPublishedEvent
 {
-    use SerializesModels;
+    use Dispatchable, SerializesModels;
 
+    /**
+     * Post.
+     *
+     * @var \Bmatovu\Publishable\Tests\Models\Post
+     */
     public $post;
 
     /**

@@ -3,8 +3,8 @@
 namespace Bmatovu\Publishable\Tests\Models;
 
 use Bmatovu\Publishable\Publishable;
-use Bmatovu\Publishable\Tests\Events\PostPublished;
-use Bmatovu\Publishable\Tests\Events\PostUnpublished;
+use Bmatovu\Publishable\Tests\Events\PostPublishedEvent;
+use Bmatovu\Publishable\Tests\Events\PostUnpublishedEvent;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -35,7 +35,7 @@ class Post extends Model
      * @var array
      */
     protected $dispatchesEvents = [
-        'published' => PostPublished::class,
-        'unpublished' => PostUnpublished::class,
+        'published' => PostPublishedEvent::class,
+        'unpublished' => PostUnpublishedEvent::class,
     ];
 }

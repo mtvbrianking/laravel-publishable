@@ -38,6 +38,17 @@ trait Publishable
      */
     public function publish(array $options = [])
     {
+        // https://laravel-news.com/laravel-model-events-getting-started
+        // https://gist.github.com/scrubmx/7fc20663ce2b3ac103a2879915b572be
+        // https://www.google.com/search?q=laravel+register+fire+model+event&oq=laravel+register+fire+model+event
+
+        // If the "publishing" event returns false we bail out immediately and return false,
+        // indicating that the save failed. This provides a chance for any
+        // listeners to cancel save operations if validations fail or whatever.
+        if ($this->fireModelEvent('publishing') === false) {
+            return false;
+        }
+
         $this->{$this->getPublishedAtColumn()} = $this->freshTimestamp();
 
         $saved = parent::save($options);
@@ -58,18 +69,10 @@ trait Publishable
      */
     public function unpublish(array $options = [])
     {
-        return $this->draft($options);
-    }
+        if ($this->fireModelEvent('unpublishing') === false) {
+            return false;
+        }
 
-    /**
-     * Save instance of this model as a draft.
-     *
-     * @param array $options
-     *
-     * @return bool
-     */
-    public function draft(array $options = [])
-    {
         $this->{$this->getPublishedAtColumn()} = null;
 
         $saved = parent::save($options);
@@ -82,13 +85,27 @@ trait Publishable
     }
 
     /**
-     * Determine if the model instance is published.
+     * Save instance of this model as a draft.
+     *
+     * @param array $options
      *
      * @return bool
      */
-    public function isPublished()
+    public function draft(array $options = [])
     {
-        return ! is_null($this->{$this->getPublishedAtColumn()});
+        return $this->draft($options);
+    }
+
+    /**
+     * Register a "publishing" model event callback with the dispatcher.
+     *
+     * @param \Closure|string $callback
+     *
+     * @return void
+     */
+    public static function publishing($callback)
+    {
+        static::registerModelEvent('publishing', $callback);
     }
 
     /**
@@ -104,6 +121,18 @@ trait Publishable
     }
 
     /**
+     * Register a "unpublishing" model event callback with the dispatcher.
+     *
+     * @param \Closure|string $callback
+     *
+     * @return void
+     */
+    public static function unpublishing($callback)
+    {
+        static::registerModelEvent('unpublishing', $callback);
+    }
+
+    /**
      * Register a "unpublished" model event callback with the dispatcher.
      *
      * @param \Closure|string $callback
@@ -113,6 +142,16 @@ trait Publishable
     public static function unpublished($callback)
     {
         static::registerModelEvent('unpublished', $callback);
+    }
+
+    /**
+     * Determine if the model instance is published.
+     *
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return ! is_null($this->{$this->getPublishedAtColumn()});
     }
 
     /**

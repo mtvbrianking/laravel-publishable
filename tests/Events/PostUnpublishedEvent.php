@@ -5,7 +5,7 @@ namespace Bmatovu\Publishable\Tests\Events;
 use Bmatovu\Publishable\Tests\Models\Post;
 use Illuminate\Queue\SerializesModels;
 
-class PostPublished
+class PostUnpublishedEvent
 {
     use SerializesModels;
 

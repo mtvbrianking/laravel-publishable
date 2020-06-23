@@ -2,8 +2,8 @@
 
 namespace Bmatovu\Publishable\Tests;
 
-use Bmatovu\Publishable\Tests\Events\PostPublished;
-use Bmatovu\Publishable\Tests\Events\PostUnpublished;
+use Bmatovu\Publishable\Tests\Events\PostPublishedEvent;
+use Bmatovu\Publishable\Tests\Events\PostUnpublishedEvent;
 use Bmatovu\Publishable\Tests\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
@@ -39,12 +39,16 @@ class PublishableTest extends TestCase
 
         $this->assertTrue($post->isPublished());
 
-        Event::assertDispatched(PostPublished::class);
+        Event::assertDispatched(PostPublishedEvent::class, function ($event) use ($post) {
+            return $event->post->id === $post->id;
+        });
 
         $post->unpublish();
 
         $this->assertFalse($post->isPublished());
 
-        Event::assertDispatched(PostUnpublished::class);
+        Event::assertDispatched(PostUnpublishedEvent::class, function ($event) use ($post) {
+            return $event->post->id === $post->id;
+        });
     }
 }
