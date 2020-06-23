@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/mtvbrianking/laravel-publishable.svg?branch=master)](https://travis-ci.org/mtvbrianking/laravel-publishable)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mtvbrianking/laravel-publishable/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mtvbrianking/laravel-publishable/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/mtvbrianking/laravel-publishable/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mtvbrianking/laravel-publishable/?branch=master)
-[![StyleCI](https://github.styleci.io/repos/230607368/shield?branch=master)](https://github.styleci.io/repos/230607368)
+[![StyleCI](https://github.styleci.io/repos/274241950/shield?branch=master)](https://github.styleci.io/repos/274241950)
 [![Documentation](https://img.shields.io/badge/Documentation-Blue)](https://mtvbrianking.github.io/laravel-publishable)
 
 This package contains a trait to make Eloquent models publishable. It enables the model to hold a published vs non-published state, which comes in handy for things like blog posts that can be drafts or final (published) posts.

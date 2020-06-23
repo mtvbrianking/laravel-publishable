@@ -2,7 +2,7 @@
   "name": "bmatovu/laravel-publishable",
   "description": "Laravel publisable.",
   "homepage": "https://github.com/mtvbrianking/laravel-publishable",
-  "type": "project",
+  "type": "library",
   "license": "MIT",
   "keywords": [
     "laravel",
