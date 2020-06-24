@@ -93,7 +93,7 @@ trait Publishable
      */
     public function draft(array $options = [])
     {
-        return $this->draft($options);
+        return $this->unpublish($options);
     }
 
     /**

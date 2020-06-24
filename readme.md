@@ -42,7 +42,7 @@ class CreatePostsTable extends Migration
 }
 ```
 
-To enable soft deletes for a model, use the `Illuminate\Database\Eloquent\SoftDeletes` trait on the model:
+To make a model publishable, use the `Bmatovu\Publishable\Publishable` trait on the model:
 
 ```php
 <?php
