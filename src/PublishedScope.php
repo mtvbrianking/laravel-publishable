@@ -13,7 +13,7 @@ class PublishedScope implements Scope
      *
      * @var array
      */
-    protected $extensions = ['WithDrafts', 'OnlyDrafts', 'onlyPublished'];
+    protected $extensions = ['WithDrafts', 'OnlyDrafts', 'OnlyPublished'];
 
     /**
      * Apply the scope to a given Eloquent query builder.

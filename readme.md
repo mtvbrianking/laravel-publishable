@@ -10,7 +10,6 @@ This package contains a trait to make Eloquent models publishable. It enables th
 
 It uses a `published_at` attribute to determine the model state ie, if the model published_at is null, the model isn't published.
 
-
 ### [Installation](https://packagist.org/packages/bmatovu/laravel-publishable)
 
 Install via Composer package manager:
@@ -21,7 +20,7 @@ composer require bmatovu/laravel-publishable
 
 ### Usage
 
-You should also add the `publsihed_at` column to your database table. 
+Add the `publsihed_at` column to your database table. 
 
 ```php
 <?php
@@ -47,7 +46,7 @@ To make a model publishable, use the `Bmatovu\Publishable\Publishable` trait on 
 ```php
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Bmatovu\Publishable\Publishable;
 use Illuminate\Database\Eloquent\Model;
@@ -60,19 +59,11 @@ class Post extends Model
 
 > {tip} The `Publishable` trait will automatically cast the `published_at` attribute to a `DateTime` / `Carbon` instance for you.
 
-Now, when you call the `publish` method on the model, the `published_at` column will be set to the current date and time. And, when querying a model that is publishable, the unpublished models will automatically be excluded from all query results.
-
-To determine if a given model instance has been published, use the `isPublished` method:
-
-```php
-if ($post->isPublished()) {
-    //
-}
-```
+Now, when you call the `publish` method on the model, the `published_at` column will be set to the current date and time. 
 
 ### Querying Publishable Models
 
-Unpublished models are automatically be excluded from query results.
+When querying a model that is publishable, the unpublished models will automatically be excluded from all query results.
 
 ```php
 $publishedPosts = Post::get();
@@ -92,9 +83,17 @@ You may also retrieve **only** unpublished models using the `onlyDrafts` method.
 $drafts = Posts::onlyDrafts()->get();
 ```
 
+To determine if a given model instance has been published, use the `isPublished` method:
+
+```php
+if ($post->isPublished()) {
+    // ...
+}
+```
+
 ### Publishing Models
 
-Sometimes you may need to save a model as published in your database. For this, use the `publish` method:
+You can save a model as published in your database like;
 
 ```php
 // Publishing a single model instance...
@@ -106,7 +105,7 @@ $post->inLifeStyle()->publish();
 
 ### Unpublishing Models
 
-Sometimes you may wish to "un-published" a published model. To toogle a published model into an inactive state, use the `unpublish` method on a model instance:
+You can "un-published" a published model like;
 
 ```php
 $post->unpublish();

@@ -3,9 +3,8 @@
 namespace Bmatovu\Publishable\Tests\Models;
 
 use Bmatovu\Publishable\Publishable;
-use Bmatovu\Publishable\Tests\Events\PostPublishedEvent;
-use Bmatovu\Publishable\Tests\Events\PostUnpublishedEvent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Post extends Model
 {
@@ -27,15 +26,24 @@ class Post extends Model
         'published_at',
     ];
 
-    /**
-     * The event map for the model.
-     *
-     * Allows for object-based events for native Eloquent events.
-     *
-     * @var array
-     */
-    protected $dispatchesEvents = [
-        'published' => PostPublishedEvent::class,
-        'unpublished' => PostUnpublishedEvent::class,
-    ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::publishing(function ($post) {
+            Log::info("Publishing post {$post->id}.");
+        });
+
+        static::published(function ($post) {
+            Log::info("Published post {$post->id}.");
+        });
+
+        static::unpublishing(function ($post) {
+            Log::info("Unpublishing post {$post->id}.");
+        });
+
+        static::unpublished(function ($post) {
+            Log::info("Unpublished post {$post->id}.");
+        });
+    }
 }

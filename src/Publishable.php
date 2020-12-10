@@ -20,7 +20,7 @@ trait Publishable
     }
 
     /**
-     * Initialize the has-drafts trait for an instance.
+     * Initialize this trait for an instance.
      *
      * @return void
      */
